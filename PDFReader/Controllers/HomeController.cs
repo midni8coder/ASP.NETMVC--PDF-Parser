@@ -94,6 +94,7 @@ namespace PDFReader.Controllers
             //FileName = DateTime.Now.ToString("yyyyMMdd") + "-" + FileName.Trim() + FileExtension;
             string errorLogPathStr = ConfigurationManager.AppSettings["ErrorLogPath"];
             string errorLogPath = Server.MapPath(errorLogPathStr);
+            bool deleteUploadedFile;
             try
             {
                 if (Request.Files.Count > 0)
@@ -105,6 +106,7 @@ namespace PDFReader.Controllers
                         var fileName = Path.GetFileName(file.FileName);
 
                         string UploadPathConfig = ConfigurationManager.AppSettings["UploadPath"].ToString();
+                        deleteUploadedFile = Convert.ToBoolean( ConfigurationManager.AppSettings["DeleteUploadedFile"].ToString());
                         string UploadPath = Server.MapPath(UploadPathConfig);
                         var path = Path.Combine(UploadPath, fileName);//+"_"+Guid.NewGuid().ToString()
 
@@ -114,7 +116,7 @@ namespace PDFReader.Controllers
                         Dictionary<string, Int64> keyValuePairs = textExtraction.CalculatePages(path, errorLogPath);
                         ViewBag.PDFInfo = keyValuePairs;
                         ViewBag.FilePath = path;
-                        if (System.IO.File.Exists(path))
+                        if (deleteUploadedFile && System.IO.File.Exists(path))
                             System.IO.File.Delete(path);
                         return Json(new { Total = keyValuePairs["TotalPages"], Colored = keyValuePairs["ColorPages"], BlackAndWhite = keyValuePairs["BWPages"] }, JsonRequestBehavior.AllowGet);
 
