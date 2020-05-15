@@ -1,0 +1,52 @@
+﻿@model PDFReader.Models.PDFFile
+@{
+    ViewBag.Title = "FileUploader";
+
+}
+
+<h2>FileUploader</h2>
+
+<div>
+
+    @if (ViewBag.PDFInfo != null)
+    {
+        <ul>
+            @foreach (var item in (Dictionary
+            <string, Int64>
+                )ViewBag.PDFInfo)
+            {
+                <li><b>@item.Key</b> : @item.Value</li>
+            }
+        </ul>
+        @*<a href="file:///@ViewBag.FilePath" target="_blank">Click Here to see file</a>*@
+    }
+
+
+</div>
+
+@using (Html.BeginForm("FileUploader", "Home", FormMethod.Post, new
+{
+    enctype = "multipart/form-data"
+}))
+{
+    <label>Total</label>
+    <br>
+    <input type="text" name="total" />
+    <br>
+    <label>Color</label>
+    <br>
+    <input type="text" name="color" />
+    <br>
+    <label>B&W</label>
+    <br>
+    <input type="text" name="BW" />
+    <br>
+
+    <label>Select File here</label>
+    <input type="file" name="PDFFileName" required /><br />
+    <label id="processingLabel" style="display:none"><strong>Processing Data... Please wait</strong></label>
+    @*<input type="submit" value="Submit" />*@
+
+    @*<button value="AJAX" onclick="SubmitAJAX()">AJAX</button>*@
+    @*<input type="button" name="AJAX" value="AJAX" onclick="SubmitAJAX()" />*@
+}
